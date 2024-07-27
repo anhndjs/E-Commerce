@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minium-scale=1.0">
+	<title> Home - Shopme Admin</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/all.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}"/>
+	<script type="text/javascript" th:src = "@{/webjars/jquery.min.js}"></script>
+	<script type="text/javascript" th:src = "@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid ">
+	<div>
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+			<a class="navbar-brand" th:href="@{/}">
+				<img  th:src="@{/images/shopmeAdminSmall.png}"/>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/users}">Users</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/categories}">Categories</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/brands}">Brands</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/products}">Products</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/customers}">Customers</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/shipping}">Shipping</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/orders}">Orders</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/report}">Sale Report</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/articles}">Articles</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/menus}">Menus</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/settings}">Settings</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<div>
+		<h2> Manage USers </h2>
+		<a th:href="@{/users/new}">create new User</a>
+	</div>
+	<div th:if="${message != null}" class="alert alert-success text-center">
+		[[${message}]]
+	</div>
+	<div>
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+			<thead class="thead-dark">
+			<tr>
+				<th>User Id</th>
+				<th>photo</th>
+				<th>email</th>
+
+				<th>
+					<a th:if="${sortField != 'firstName'}" class="text-white"
+					th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${sortDir}} ">
+						First Name</a>
+					<a th:if="${sortField == 'firstName'}" class="text-white"
+					   th:href="@{'/users/page/' + ${currentPage} + '?sortField=firstName&sortDir=' + ${reverseSortDir}} ">
+						First Name</a>
+					<span th:if="${sortField == 'firstName'}"
+						  th:class="${sortDir == 'asc'  ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
+				</th>
+
+				<th>Last Name</th>
+
+				<th>Roles</th>
+
+				<th>Enable</th>
+				<th></th>
+				<th></th>
+
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="user : ${listUsers}">
+
+				<td data-id="[[${user.id}]]">[[${user.id}]]</td>
+
+				<td>
+					<span th:if="${user.photo == null}" class="fas fa-portrait fa-3x icon-silver"></span>
+					<img th:if="${user.photo != null }" th:src="@{${user.photosImagePath}}" style="width: 100px" alt=""/>
+				</td>
+				<td>[[${user.email}]]</td>
+				<td>[[${user.firstName}]]</td>
+				<td>[[${user.lastName}]]</td>
+				<td>[[${user.roleSet}]]</td>
+				<td>[[${user.enabled}]]</td>
+				<td>
+					<a th:if="${user.enabled == true }" class="fas fa-check-circle fa-2x icon-green"
+					   th:href="@{'/users/' + ${user.id} + '/enabled/false'} "
+						title="Disabled this user"
+					></a>
+					<a th:if="${user.enabled == false }" class="fas fa-circle fa-2x icon-dark"
+					   th:href="@{'/users/' + ${user.id} + '/enabled/true'}"
+						title="Enable this user"
+					></a>
+
+
+				</td>
+
+				<td style="display: flex; align-items: center; justify-content: space-around;">
+					<a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/edit/' + ${user.id}}" title="Edit this user"></a>&nbsp;
+					<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/users/delete/' + ${user.id}}" th:userID="${user.id}" title="Delete user"></a>
+				</td>
+
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="text-center m-1" th:if="${totalItems > 0}">
+		<span>Showing User # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
+	</div>
+	<div class="text-center m-1" th:unless="${totalItems > 0}">
+		<span>No User found</span>
+	</div>
+	<div>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+					<a class="page-link" th:href="@{'/users/page/1?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">First</a>
+				</li>
+				<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+					<a class="page-link" th:href="@{'/users/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Previous</a></li>
+				<li th:class="${currentPage != i ? 'page-item' : 'page-item active'}"
+					th:each="i : ${#numbers.sequence(1, totalPage)}">
+					<a class="page-link" th:href="@{'/users/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
+				</li>
+
+				<li th:class="${currentPage < totalPage ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage + 1} + ' ?sortField= ' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a></li>
+				<li th:class="${currentPage < totalPage ? 'page-item' : 'page-item disabled'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPage}  + '?sortField= ' + ${sortField} + '&sortDir=' + ${sortDir}}">last</a></li>
+
+			</ul>
+		</nav>
+	</div>
+
+	<div class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" >Delete Confirmation</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">yes</a>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="text-center">
+		<p> Shopme Control panel - copyright
+
+			&copy; Shopme </p>
+	</div>
+</div>
+<script type="text/javascript ">
+	$(document).ready(function (){
+		$(".link-delete").on("click", function (e){
+			e.preventDefault();
+			link = $(this);
+			alert($(this).attr("href"));
+
+			userId = link.attr("userId");
+			$("#yesButton").attr("href");
+			$("#confirmText").text("are you sure want to delete this user ID" + userId);
+			$("#confirmModal").modal();
+		});
+	});
+
+</script>
+</body>
+
+</html>
