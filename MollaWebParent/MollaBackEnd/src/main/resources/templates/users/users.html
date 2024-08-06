@@ -63,6 +63,8 @@
 	<div>
 		<h2> Manage USers </h2>
 		<a th:href="@{/users/new}">create new User</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/users/export/csv}">export CSV</a>
 	</div>
 	<div th:if="${message != null}" class="alert alert-success text-center">
 		[[${message}]]
@@ -199,7 +201,9 @@
 			$("#confirmModal").modal();
 		});
 	});
-	// function clearF
+	function clearFilter(){
+		window.location = "[[@{/users}]]";
+	}
 </script>
 </body>
 

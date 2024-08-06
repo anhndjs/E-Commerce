@@ -2,6 +2,7 @@ package com.molla.admin.controller;
 
 
 import com.molla.admin.error.UserNotFoundException;
+import com.molla.admin.exportcsv.UserCsvExporter;
 import com.molla.admin.service.UserService;
 import com.molla.admin.util.FileUploadUtil;
 import com.molla.common.entity.Role;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +43,8 @@ public class UserController {
                              @Param("sortField") String sortField,
                              @Param("sortDir") String sortDir,
                              @Param("keyword") String keyword) {
-        System.out.println("sourt field " + sortField);
-        System.out.println("sort order" + sortDir);
+        System.out.println(keyword);
+
         Page<User> page = service.listByPage(pageNum, sortField, sortDir, keyword);
         List<User> listUsers = page.getContent();
         long startCount = (long) (pageNum - 1) * UserService.USERS_PER_PAGE + 1;
@@ -98,8 +100,14 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", "the user has been saved succesfully");
 //         service.save(user);
-        return "redirect:/users";
+        return getRedirectURLtoAffectedUser(user);
     }
+
+    private static String getRedirectURLtoAffectedUser(User user) {
+        String firstPartOfEmail = user.getEmail().split("@")[0];
+        return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
+    }
+
     @GetMapping("/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Integer id,Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -137,5 +145,12 @@ public class UserController {
         String message = "The user Id" + id + "has been" + status;
         redirectAttributes.addFlashAttribute("message", message);
         return  "redirect:/users";
+    }
+    @GetMapping("/users/export/csv")
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        List<User> listUsers = service.listAll();
+
+        UserCsvExporter exporter = new UserCsvExporter();
+        exporter.export(listUsers, response);
     }
 }

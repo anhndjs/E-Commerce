@@ -30,12 +30,16 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     public Page<User> listByPage(int pageNum, String sortField, String sortDir, String keyword){
-        Sort  sort = Sort.by(sortField);
+        Sort sort = Sort.by(sortField);
+
         sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
         Pageable pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
+        System.out.println("sfs" + keyword);
         if(keyword != null) {
+            System.out.println(keyword + pageable);
             return userRepo.findAll(keyword, pageable);
         }
+        System.out.println("search"+ pageable);
         return userRepo.findAll(pageable);
     }
 
