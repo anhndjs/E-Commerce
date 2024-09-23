@@ -3,6 +3,8 @@ package com.molla.admin.controller;
 
 import com.molla.admin.error.UserNotFoundException;
 import com.molla.admin.exportcsv.UserCsvExporter;
+import com.molla.admin.exportexcel.UserExcelExporter;
+import com.molla.admin.exportpdf.UserPdfExporter;
 import com.molla.admin.service.UserService;
 import com.molla.admin.util.FileUploadUtil;
 import com.molla.common.entity.Role;
@@ -103,7 +105,7 @@ public class UserController {
         return getRedirectURLtoAffectedUser(user);
     }
 
-    private static String getRedirectURLtoAffectedUser(User user) {
+    static String getRedirectURLtoAffectedUser(User user) {
         String firstPartOfEmail = user.getEmail().split("@")[0];
         return "redirect:/users/page/1?sortField=id&sortDir=asc&keyword=" + firstPartOfEmail;
     }
@@ -152,5 +154,17 @@ public class UserController {
 
         UserCsvExporter exporter = new UserCsvExporter();
         exporter.export(listUsers, response);
+    }
+    @GetMapping("/users/export/excel")
+    public  void exportToExcel(HttpServletResponse response) throws IOException{
+        List<User> listUser = service.listAll();
+        UserExcelExporter exporter = new UserExcelExporter();
+        exporter.export(listUser, response);
+    }
+    @GetMapping("/users/export/pdf")
+    public  void exportToPDF (HttpServletResponse response) throws IOException{
+        List<User> listUser = service.listAll();
+        UserPdfExporter exporter = new UserPdfExporter();
+        exporter.export(listUser, response);
     }
 }

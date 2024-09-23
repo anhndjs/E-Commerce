@@ -7,7 +7,10 @@
 	<div>
 		<h2>Manage Categories | [[${pageTitle}]]</h2>	
 	</div>
-
+<!--	<div th:if="${message != null}" class="alert alert-success text-center">-->
+<!--		[[${message}]]-->
+<!--	</div>-->
+	<div>
 	<form th:action="@{/categories/save}" method="post" style="max-width: 500px; margin: 0 auto"
 		enctype="multipart/form-data"
 		onsubmit="return checkUnique(this)"
@@ -26,7 +29,7 @@
 			<div class="col-sm-8">
 				<input type="text" class="form-control" th:field="*{alias}" required minlength="3" maxlength="64"  />
 			</div>
-		</div>		
+		</div>
 
 		<div class="form-group row">
 			<label class="col-sm-4 col-form-label">Parent Category:</label>
@@ -40,23 +43,23 @@
 
 				</select>
 			</div>
-		</div>		
+		</div>
 
 		<div class="form-group row">
 			<label class="col-sm-4 col-form-label">Image:</label>
 			<div class="col-sm-8">
 				<input type="hidden" th:field="*{image}" />
 				<input type="file" id="fileImage" name="fileImage" accept="image/png, image/jpeg"
-					class="mb-2"
-					th:required="${category.imagePath == null}"
-					/>
+					class="mb-2" />
+<!--					th:required="${category.imagePath == null}"-->
+<!--					/>-->
 
 				<div class="mt-2">
-					<img id="thumbnail" alt="Image preview" th:src="@{${category.imagePath}}"
-						class="img-fluid" />
+<!--					<img id="thumbnail" alt="Image preview" th:src="@{${category.imagePath}}"-->
+<!--						class="img-fluid" />-->
 				</div>
 			</div>
-		</div>						
+		</div>
 
 		<div class="form-group row">
 			<label class="col-sm-4 col-form-label">Enabled:</label>
@@ -71,7 +74,7 @@
 		</div>
 	</div>
 	</form>
-
+	</div>
 	<div th:replace="modal_fragments :: modal_dialog"></div>
 
 	<div th:replace="fragments :: footer"></div>
@@ -92,24 +95,24 @@
 
 		url = "[[@{/categories/check_unique}]]";
 
-		params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
+		// params = {id: catId, name: catName, alias: catAlias, _csrf: csrfValue};
 
-		$.post(url, params, function(response) {
-			if (response == "OK") {
-				form.submit();
-			} else if (response == "DuplicateName") {
-				showWarningModal("There is another category having same name " + catName);
-			} else if (response == "DuplicateAlias") {
-				showWarningModal("There is another category having same alias " + catAlias);
-			} else {
-				showErrorModal("Unknown response from server");
-			}
-
-		}).fail(function() {
-			showErrorModal("Could not connect to the server");
-		});
-
-		return false;
+		// $.post(url, params, function(response) {
+		// 	if (response == "OK") {
+		// 		form.submit();
+		// 	} else if (response == "DuplicateName") {
+		// 		showWarningModal("There is another category having same name " + catName);
+		// 	} else if (response == "DuplicateAlias") {
+		// 		showWarningModal("There is another category having same alias " + catAlias);
+		// 	} else {
+		// 		showErrorModal("Unknown response from server");
+		// 	}
+		//
+		// }).fail(function() {
+		// 	showErrorModal("Could not connect to the server");
+		// });
+		//
+		// return false;
 	}
 
 </script>

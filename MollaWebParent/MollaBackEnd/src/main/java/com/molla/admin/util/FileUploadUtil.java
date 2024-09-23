@@ -1,5 +1,6 @@
 package com.molla.admin.util;
 
+import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class FileUploadUtil {
+
     public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {

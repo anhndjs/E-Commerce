@@ -10,5 +10,9 @@ public class MainController {
     public String mainn(){
         return "index.html";
     }
+    @GetMapping("/login")
+    public String viewLoginPage(){
+        return "login";
+    }
 
 }
