@@ -39,18 +39,24 @@
 				<th>Alias</th>
 				<th>Enabled</th>
 				<th></th>
+				<th></th>
+
 			</tr>
 			</thead>
 			<tbody>
 			<tr th:each="cat : ${listCategories}">
 
 				<td>[[${cat.id}]]</td>
-				<td></td>
+				<td>
+					<img th:src="@{${cat.imagePath}}" style="width: 100px" class="img-fluid"/>
+				</td>
 				<td>[[${cat.name}]]</td>
 				<td>[[${cat.alias}]]</td>
-<!--
--->
-
+				<td></td>
+				<td style="display: flex; align-items: center; justify-content: space-around;">
+					<a class="fas fa-edit fa-2x icon-green" th:href="@{'/categories/edit/' + ${cat.id}}" title="Edit this user"></a>&nbsp;
+					<a class="fas fa-trash fa-2x icon-dark link-delete" th:href="@{'/categories/delete/' + ${cat.id}}"  title="Delete user"></a>
+				</td>
 			</tr>
 			</tbody>
 		</table>

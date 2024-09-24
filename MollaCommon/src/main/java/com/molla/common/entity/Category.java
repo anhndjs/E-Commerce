@@ -26,6 +26,7 @@ public class Category {
     @Column(length = 123, nullable = false)
     private String image;
     private boolean enabled;
+
     @OneToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
@@ -86,61 +87,11 @@ public class Category {
 
         return copyCategory;
     }
+    @Transient
+    public  String getImagePath(){
+        if(this.id == null) return "/images/image-thumbnail.png";
+    return "/category-images/" + this.id + "/" + this.image;
+    }
 
 
-//    public boolean isenabled() {
-//        return enabled;
-//    }
-//
-//    public void setenabled(boolean enabel) {
-//        this.enabled = enabel;
-//    }
-//
-//    public Integer getId() {
-//        return id;
-//    }
-//
-//    public void setId(Integer id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getAlias() {
-//        return alias;
-//    }
-//
-//    public void setAlias(String alias) {
-//        this.alias = alias;
-//    }
-//
-//    public String getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(String image) {
-//        this.image = image;
-//    }
-//
-//    public Category getParent() {
-//        return parent;
-//    }
-//
-//    public void setParent(Category parent) {
-//        this.parent = parent;
-//    }
-//
-//    public Set<Category> getChildren() {
-//        return children;
-//    }
-//
-//    public void setChildren(Set<Category> children) {
-//        this.children = children;
-//    }
 }
