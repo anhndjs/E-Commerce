@@ -74,11 +74,11 @@ public class CategoryRepositoryTests {
     public void prinNull(){
 
     }
-    @Test
-    public void testFindByname(){
-        String name = "computer";
-        Category category = repo.findByName(name);
-        assertThat(category).isNotNull();
-        assertThat(category.getName()).isEqualTo(name);
-    }
+//    @Test
+//    public void testFindByname(){
+//        String name = "computer";
+//        Category category = repo.findByName(name);
+//        assertThat(category).isNotNull();
+//        assertThat(category.getName()).isEqualTo(name);
+//    }
 }

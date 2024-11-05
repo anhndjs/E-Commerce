@@ -3,9 +3,11 @@ package com.molla.common.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,10 +16,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Category {
+public class Category{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    protected Integer id;
 
     @Column(length = 123, nullable = false, unique = true)
     private String name;
@@ -25,16 +27,20 @@ public class Category {
     private String alias;
     @Column(length = 123, nullable = false)
     private String image;
+
     private boolean enabled;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
+    @OrderBy("name asc")
+    @ToString.Exclude
     private Set<Category> children = new HashSet<>();
 
-
+    @Transient
+    private boolean hasChildren;
     public Category(Integer id) {
         this.id = id;
     }
@@ -63,6 +69,7 @@ public class Category {
         coppyCategory.setImage(category.getImage());
         coppyCategory.setAlias(category.getAlias());
         coppyCategory.setEnabled(category.isEnabled());
+        coppyCategory.setHasChildren(category.getChildren().size() > 0);
         return coppyCategory;
 
     }
@@ -87,11 +94,27 @@ public class Category {
 
         return copyCategory;
     }
+
+    @Transient
+    public String parentBreadcrumb(){
+        Category parent = this.getParent();
+        if(parent == null) return "";
+
+        String parentName = parent.getName();
+        String parentPath = parent.parentBreadcrumb();
+
+        if (parentPath.isEmpty()) return parentName;
+
+        return parentPath + "/" + parentName;
+    }
     @Transient
     public  String getImagePath(){
         if(this.id == null) return "/images/image-thumbnail.png";
     return "/category-images/" + this.id + "/" + this.image;
     }
-
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.molla.admin.util;
 
+import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,5 +44,17 @@ public class FileUploadUtil {
         } catch (IOException ex) {
             System.out.println("could not list directory" + dirPath);
         }
+    }
+
+    public static void removeDir(String Dir) {
+        cleanDir(Dir);
+        try {
+            Files.delete(Paths.get(Dir));
+        } catch (IOException e){
+            //LOGGER.error("could not remove directory " + Dir);
+        }
+    }
+
+    public static void cleanDir(String uploadDir, String fileName, MultipartFile multipartFile) {
     }
 }
